@@ -19,7 +19,7 @@ const MyNotes: React.FC<Props> = ({ notes, onDelete }) => {
     }, [])
 
     return (
-        <ScrollView  style={{height: windowHeight - 170}} >
+        <ScrollView  style={{height: windowHeight - 180}} >
             <FlatList nestedScrollEnabled data={notes} keyExtractor={note => note.id.toString()} renderItem={({ item }) => <Note note={item} remove={() => handleDelete(item.id)} />} />
         </ScrollView>
   );

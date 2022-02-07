@@ -72,7 +72,6 @@ const Note: React.FC<Props> = ({ note, remove }) => {
             <View style={styles.footer}>
                 <TextInput maxLength={20} style={styles.input} placeholder={'Add Task...'} defaultValue={taskTitle.toString()} onChangeText={text => setTaskTitle(text)} />
                 <View>
-
                     <Button onPress={handleSubmit} color={'#2a7dd1'} title='Add' />
                 </View>
             </View>
