@@ -3,7 +3,7 @@ import { FlatList, LogBox, ScrollView, View } from 'react-native';
 import Note from './Note';
 
 interface Props {
-    notes: Array<Object>,
+    notes: Array<{title: String, id: Number}>,
     onDelete: Function
 };
 
