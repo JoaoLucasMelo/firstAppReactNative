@@ -2,6 +2,7 @@ import { StyleSheet, View, Text, Button, TouchableHighlight, TextInput, FlatList
 import React, { useState } from 'react';
 import Task from './Task';
 import { useFonts } from 'expo-font';
+import { Ionicons } from '@expo/vector-icons';
 
 interface Props {
     note: { id: Number, title: String },
@@ -56,7 +57,8 @@ const Note: React.FC<Props> = ({ note, remove }) => {
                     <View style={styles.headerRight}>
                         <Text style={styles.checked}>{checked}/{tasks.length}</Text>
                         <TouchableHighlight>
-                            <Button onPress={handleDeleteNote} title='Delete' color={'#c4213f'} />
+                        <Ionicons name="trash-bin" onPress={handleDeleteNote} size={24} color="#c4213f" />
+                            {/* <Button onPress={handleDeleteNote} title='Delete' color={'#c4213f'} /> */}
                         </TouchableHighlight>
                     </View>
                 </View>

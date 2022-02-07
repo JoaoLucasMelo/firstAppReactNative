@@ -3,6 +3,7 @@ import React from 'react';
 import Swipeout from 'react-native-swipeout';
 import { useFonts } from 'expo-font';
 
+
 interface Props {
     task: { taskTitle: String, id: Number, check: Boolean},
     onCheck: Function,
@@ -31,7 +32,7 @@ const Task: React.FC<Props> = ({ task, onCheck, onDelete }) => {
         <Swipeout style={styles.margin} backgroundColor='transparent'  right={swipeoutBtns}>
             <TouchableOpacity  onPress={() => onCheck()}>
                 <View >
-                    <Text style={[task.check ? styles.taskChecked : styles.task]}>• {task.taskTitle} { task.check? '✔' : '' }</Text>
+                    <Text style={[task.check ? styles.taskChecked : styles.task]}>{ task.check? '✔' : '•' } {task.taskTitle}</Text>
                 </View>
             </TouchableOpacity>
         </Swipeout>
