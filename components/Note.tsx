@@ -15,6 +15,8 @@ const Note: React.FC<Props> = ({ note, remove }) => {
     let [taskTitle, setTaskTitle] = useState<String>('');
     let [checked, setChecked] = useState<Number>(0);
 
+
+
     const [loaded] = useFonts({
         Montserrat: require('../assets/fonts/Montserrat-Regular.ttf'),
       });
