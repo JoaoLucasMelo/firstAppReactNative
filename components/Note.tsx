@@ -1,17 +1,22 @@
-import { StyleSheet, View, Text, Button, TouchableHighlight, TextInput, FlatList } from 'react-native';
+import { StyleSheet, View, Text, Button, TouchableHighlight, TextInput, FlatList, ScrollView } from 'react-native';
 import React, { useState } from 'react';
 import Task from './Task';
+import { useFonts } from 'expo-font';
 
 interface Props {
-    note: Object,
+    note: { id: Number, title: String },
     remove: Function
 };
 
 const Note: React.FC<Props> = ({ note, remove }) => {
 
-    let [tasks, setTasks] = useState<Array<Object>>([]);
+    let [tasks, setTasks] = useState<Array<{taskTitle: String, id: Number, check: Boolean}>>([]);
     let [taskTitle, setTaskTitle] = useState<String>('');
     let [checked, setChecked] = useState<Number>(0);
+
+    const [loaded] = useFonts({
+        Montserrat: require('../assets/fonts/Montserrat-Regular.ttf'),
+      });
     
     const handleDeleteNote = () => {
         remove();
@@ -21,22 +26,28 @@ const Note: React.FC<Props> = ({ note, remove }) => {
         if (taskTitle) {
             setTasks(tasks = [...tasks, { id: Math.floor(Math.random() * 10000), taskTitle: taskTitle, check: false }]);
             setTaskTitle('');
-            console.log(tasks)
         }
     };
-    const handleDelete = (id: number) => {
-        setTasks(tasks = tasks.filter(task => task.id !== id))
+    const handleDelete = (id: Number) => {
+        let newTasks = tasks.filter(task => task.id !== id)
+        setTasks(tasks = newTasks)
+        setChecked(checked = newTasks.filter(t => t.check).length)
     };
 
-    const handleCheck = (task: Object) => {
-        const newTasks = [...tasks];  
+    const handleCheck = (task: { check: Boolean, taskTitle: String, id: Number }) => {
+        const newTasks = [...tasks];
         const index = newTasks.indexOf(task);
         newTasks[index] = { ...task };
         newTasks[index].check = !tasks[index].check;
         setTasks(newTasks);
         setChecked(checked = newTasks.filter(t => t.check).length);
-        console.log(newTasks)
-    }
+    };
+
+    
+    if (!loaded) {
+        return null;
+    };
+
     return (
         <View style={styles.container}>
             <View style={styles.flex}>
@@ -45,20 +56,20 @@ const Note: React.FC<Props> = ({ note, remove }) => {
                     <View style={styles.headerRight}>
                         <Text style={styles.checked}>{checked}/{tasks.length}</Text>
                         <TouchableHighlight>
-                            <Button onPress={handleDeleteNote} title='Delete' color={'red'} />
+                            <Button onPress={handleDeleteNote} title='Delete' color={'#c4213f'} />
                         </TouchableHighlight>
                     </View>
                 </View>
                 <View style={ styles.separator }></View>
-                <View>
-                    <FlatList data={tasks} keyExtractor={task => task.id.toString()} renderItem={({ item }) => <Task onCheck={() => handleCheck(item)} task={item} onDelete={() => handleDelete(item.id)} />} />
-                </View>
+                <ScrollView persistentScrollbar nestedScrollEnabled style={styles.scroll}>
+                    <FlatList  data={tasks} keyExtractor={task => task.id.toString()} renderItem={({ item }) => <Task onCheck={() => handleCheck(item)} task={item} onDelete={() => handleDelete(item.id)} />} />
+                </ScrollView>
             </View>
             <View style={styles.footer}>
-                <TextInput style={styles.input} placeholder={'Add Task...'} value={taskTitle} onChangeText={text => setTaskTitle(text)} />
+                <TextInput maxLength={20} style={styles.input} placeholder={'Add Task...'} defaultValue={taskTitle.toString()} onChangeText={text => setTaskTitle(text)} />
                 <View>
 
-                    <Button onPress={handleSubmit} title='Add' />
+                    <Button onPress={handleSubmit} color={'#2a7dd1'} title='Add' />
                 </View>
             </View>
             
@@ -72,22 +83,24 @@ const styles = StyleSheet.create({
         padding: 7,
         margin: 10,
         borderWidth: 4,
-        backgroundColor: '#e9f5f9',
-        borderColor: 'dodgerblue',
+        backgroundColor: '#f0f7ff',
+        borderColor: '#2a7dd1',
         borderRadius: 10,
         justifyContent: 'space-between',
     },
     title: {
         fontSize: 18,
+        fontFamily: 'Montserrat'
     },
     header: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        paddingHorizontal: 10
+        paddingHorizontal: 10,
+        alignItems: 'center'
     },
     headerRight: {
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     flex: {
 
@@ -103,7 +116,8 @@ const styles = StyleSheet.create({
         flex: 1,
         borderRadius: 5,
         marginRight: 5,
-        borderColor: 'dodgerblue'
+        borderColor: '#2a7dd1',
+        fontFamily: 'Montserrat'
     },
     checked: {
         marginEnd: 10,
@@ -111,8 +125,11 @@ const styles = StyleSheet.create({
     },
     separator: {
         height: 1,
-        backgroundColor: 'dodgerblue',
+        backgroundColor: '#2a7dd1',
         marginVertical: 5
+    },
+    scroll: {
+        marginBottom: 3
     }
 });
 export default Note;

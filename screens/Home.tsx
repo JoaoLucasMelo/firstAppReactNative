@@ -6,7 +6,7 @@ import MyNotes from '../components/MyNotes';
 export default function Home() {
 
   let [title, setTitle] = useState<String>('');
-  let [notes, setNotes] = useState<Array<Object>>([]);
+  let [notes, setNotes] = useState<Array<{id: Number, title: String}>>([]);
   
   const handleTitleChange = (newTitle: String) => {
     setTitle(newTitle);
@@ -18,7 +18,7 @@ export default function Home() {
       setTitle('');
     };
   };
-  const handleDelete = (id: number) => {
+  const handleDelete = (id: Number) => {
     setNotes(notes = notes.filter(note => note.id !== id))
   };
 

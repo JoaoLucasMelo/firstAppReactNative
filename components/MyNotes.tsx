@@ -1,5 +1,5 @@
-import React from 'react';
-import { FlatList, View, Text } from 'react-native';
+import React, { useEffect } from 'react';
+import { FlatList, LogBox, ScrollView, View } from 'react-native';
 import Note from './Note';
 
 interface Props {
@@ -12,11 +12,14 @@ const MyNotes: React.FC<Props> = ({ notes, onDelete }) => {
     const handleDelete = (id: Number) => {
         onDelete(id)
     }
+    useEffect(() => {
+        LogBox.ignoreLogs(['VirtualizedLists should never be nested']);   
+    }, [])
 
     return (
-        <View>
-            <FlatList data={notes} keyExtractor={note => note.id.toString()} renderItem={({ item }) => <Note note={item} remove={() => handleDelete(item.id)} />}/>
-        </View>
+        <ScrollView  style={{height: 670}} >
+            <FlatList nestedScrollEnabled data={notes} keyExtractor={note => note.id.toString()} renderItem={({ item }) => <Note note={item} remove={() => handleDelete(item.id)} />} />
+        </ScrollView>
   );
 };
 
