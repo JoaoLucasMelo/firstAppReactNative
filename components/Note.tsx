@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import Task from './Task';
 import { useFonts } from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
+import { ConfirmProvider, useConfirm } from 'react-native-confirm-dialog';
+
 
 interface Props {
     note: { id: Number, title: String },
@@ -15,15 +17,26 @@ const Note: React.FC<Props> = ({ note, remove }) => {
     let [taskTitle, setTaskTitle] = useState<String>('');
     let [checked, setChecked] = useState<Number>(0);
 
-
+    const ConfirmableButton = () => {
+        const confirm = useConfirm()
+        const handlePress = () => {
+          confirm({
+              title: 'Delete this note?',
+              showCancel: true,
+              confirmLabel: 'Delete',
+              confirmButtonStyle: { backgroundColor: '#ff5d5d' },
+              cancelButtonStyle: { backgroundColor: '#d3d3d3', borderWidth: 0 },
+              onConfirm: () => {remove();}
+          })
+        }
+        
+        return <Ionicons name="trash-bin" onPress={handlePress} size={24} color="#c4213f" />
+      }
 
     const [loaded] = useFonts({
         Montserrat: require('../assets/fonts/Montserrat-Regular.ttf'),
       });
     
-    const handleDeleteNote = () => {
-        remove();
-    };
 
     const handleSubmit = () => {
         if (taskTitle) {
@@ -59,8 +72,11 @@ const Note: React.FC<Props> = ({ note, remove }) => {
                     <View style={styles.headerRight}>
                         <Text style={styles.checked}>{checked}/{tasks.length}</Text>
                         <TouchableHighlight>
-                        <Ionicons name="trash-bin" onPress={handleDeleteNote} size={24} color="#c4213f" />
-                            {/* <Button onPress={handleDeleteNote} title='Delete' color={'#c4213f'} /> */}
+                            <ConfirmProvider>
+                            <ConfirmableButton />
+                        {/* <Ionicons name="trash-bin" onPress={handleDeleteNote} size={24} color="#c4213f" /> */}
+                                {/* <Button onPress={handleDeleteNote} title='Delete' color={'#c4213f'} /> */}
+                                </ConfirmProvider>
                         </TouchableHighlight>
                     </View>
                 </View>
@@ -79,6 +95,8 @@ const Note: React.FC<Props> = ({ note, remove }) => {
         </View>
     );
 };
+
+
 
 const styles = StyleSheet.create({
     container: {
@@ -106,7 +124,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     flex: {
-
         flex: 1
     },
     footer: {

@@ -19,6 +19,7 @@ export default function Home() {
     };
   };
   const handleDelete = (id: Number) => {
+    
     setNotes(notes = notes.filter(note => note.id !== id))
   };
 

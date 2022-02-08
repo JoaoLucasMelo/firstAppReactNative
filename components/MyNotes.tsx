@@ -7,7 +7,7 @@ interface Props {
     onDelete: Function
 };
 
-const MyNotes: React.FC<Props> = ({ notes, onDelete }) => {
+const MyNotes: React.FC<Props> = ({ notes, onDelete}) => {
 
     const windowHeight = Dimensions.get('window').height;
 
